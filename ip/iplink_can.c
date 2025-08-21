@@ -49,6 +49,7 @@ static void print_usage(FILE *f)
 		"\t[ restricted { on | off } ]\n"
 		"\t[ xl { on | off } ]\n"
 		"\t[ xtdc-mode { auto | manual | off } ]\n"
+		"\t[ tms { on | off } ]\n"
 		"\n"
 		"\t[ restart-ms TIME-MS ]\n"
 		"\t[ restart ]\n"
@@ -133,6 +134,7 @@ static void print_ctrlmode(enum output_type t, __u32 flags, const char* key)
 	print_flag(t, &flags, CAN_CTRLMODE_XL, "XL");
 	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_AUTO, "XL-TDC-AUTO");
 	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_MANUAL, "XL-TDC-MANUAL");
+	print_flag(t, &flags, CAN_CTRLMODE_XL_TMS, "XL-TMS");
 
 	if (flags)
 		print_hex(t, NULL, "%x", flags);
@@ -339,6 +341,9 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
 				invarg("\"xtdc-mode\" must be either of \"auto\", \"manual\" or \"off\"",
 					*argv);
 			}
+		} else if (matches(*argv, "tms") == 0) {
+			NEXT_ARG();
+			set_ctrlmode("tms", *argv, &cm, CAN_CTRLMODE_XL_TMS);
 		} else if (matches(*argv, "restart") == 0) {
 			__u32 val = 1;
 
